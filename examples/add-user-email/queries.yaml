@@ -1,0 +1,37 @@
+version: 1
+
+queries:
+  - id: active-users
+    sql: |
+      SELECT id, email, display_name
+      FROM users
+      WHERE status = :status
+      ORDER BY id
+    parameters:
+      status:
+        type: text
+        value: active
+    compare:
+      baseline_to_up: preserve
+      baseline_to_down: preserve
+      row_order: ordered
+    assertions:
+      non_null: [id, email]
+      unique_by: [id]
+    plan:
+      warn_on_full_scan: [users]
+
+  - id: status-counts
+    sql: |
+      SELECT status, COUNT(*) AS user_count
+      FROM users
+      GROUP BY status
+      ORDER BY status
+    compare:
+      row_order: ordered
+    assertions:
+      non_null: [status, user_count]
+
+schema_assertions:
+  - state: after_up
+    index_exists: idx_user_email_lookup_normalized
