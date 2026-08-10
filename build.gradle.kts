@@ -32,7 +32,7 @@ java {
 }
 
 dependencies {
-    implementation("org.xerial:sqlite-jdbc:3.53.1.0")
+    implementation("org.xerial:sqlite-jdbc:3.53.2.1")
     implementation(platform("com.fasterxml.jackson:jackson-bom:2.21.5"))
     implementation("com.fasterxml.jackson.core:jackson-databind")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
