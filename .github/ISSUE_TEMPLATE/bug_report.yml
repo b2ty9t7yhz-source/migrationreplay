@@ -1,0 +1,45 @@
+name: Bug report
+description: Report a reproducible MigrationReplay defect using synthetic inputs.
+title: "[Bug] "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not attach production data, credentials, patient data, or sensitive SQL.
+        Reduce the problem to a synthetic five-file bundle.
+  - type: input
+    id: version
+    attributes:
+      label: MigrationReplay version
+      placeholder: "1.0.0"
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Operating system, Java version, and SQLite version from the report.
+      placeholder: "Ubuntu 24.04, Java 21.0.x, SQLite 3.x"
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal synthetic reproduction
+      description: Commands and the smallest safe bundle that reproduces the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include the structured error code or redacted report section.
+    validations:
+      required: true

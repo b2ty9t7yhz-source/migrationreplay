@@ -1,0 +1,35 @@
+name: Feature request
+description: Propose a focused extension that preserves MigrationReplay's safety boundary.
+title: "[Feature] "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What migration-testing gap is not covered by the current V1 scope?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Describe inputs, outputs, comparison semantics, and failure behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: determinism
+    attributes:
+      label: Determinism and safety impact
+      description: Explain ordering, runtime types, external effects, and reproducibility.
+    validations:
+      required: true
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope confirmation
+      options:
+        - label: This proposal does not require a production database connection.
+          required: true
+        - label: Examples and tests can use synthetic data only.
+          required: true

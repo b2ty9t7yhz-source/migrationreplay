@@ -4,6 +4,11 @@ MigrationReplay uses unit, component, integration, and CLI tests. Every fixture
 is synthetic. The suite does not connect to a production database and does not
 use timing-sensitive assertions.
 
+The V1.0.0 gate contains 70 tests and enforces minimum JaCoCo coverage of 84%
+for lines and 65% for branches. The thresholds are lower than the current
+measured values so ordinary refactoring has a small margin while meaningful
+coverage loss still fails the build.
+
 ## Required failure coverage
 
 | Scenario | Expected invariant or evidence |
@@ -37,6 +42,11 @@ temporary database paths.
 ## Local verification
 
 ```bash
-./gradlew clean test --no-daemon
-./gradlew run --args="run examples/add-user-email --output-dir build/example-report" --no-daemon
+./gradlew clean check installDist distZip --warning-mode all --no-daemon
+./build/install/migrationreplay/bin/migrationreplay \
+  run examples/add-user-email \
+  --output-dir build/example-report
 ```
+
+CI repeats this gate, smoke-tests the packaged CLI, and uploads the distribution,
+reports, and HTML coverage report as workflow artifacts.
