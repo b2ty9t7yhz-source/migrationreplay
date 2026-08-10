@@ -8,10 +8,14 @@ import dev.migrationreplay.report.ReportModels.RunReport;
 import dev.migrationreplay.report.ReportWriter;
 import dev.migrationreplay.report.ReportWriter.WrittenReports;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.file.Path;
+import java.util.Properties;
 
 public final class Main {
+    private static final String VERSION = loadVersion();
+
     private Main() {}
 
     public static void main(String[] args) {
@@ -19,6 +23,10 @@ public final class Main {
     }
 
     public static int run(String[] args, PrintStream out, PrintStream err) {
+        if (args.length == 1 && args[0].equals("--version")) {
+            out.println("MigrationReplay " + VERSION);
+            return 0;
+        }
         if (args.length == 0 || args[0].equals("--help") || args[0].equals("-h")) {
             printUsage(out);
             return args.length == 0 ? 2 : 0;
@@ -74,10 +82,24 @@ public final class Main {
     }
 
     private static void printUsage(PrintStream output) {
-        output.println("MigrationReplay V1");
+        output.println("MigrationReplay " + VERSION);
         output.println("Usage:");
         output.println("  migrationreplay validate <bundle-directory>");
         output.println("  migrationreplay run <bundle-directory> --output-dir <directory>");
+    }
+
+    private static String loadVersion() {
+        Properties properties = new Properties();
+        try (InputStream stream = Main.class.getResourceAsStream(
+                "/dev/migrationreplay/version.properties")) {
+            if (stream == null) {
+                return "development";
+            }
+            properties.load(stream);
+            return properties.getProperty("version", "development");
+        } catch (IOException exception) {
+            return "development";
+        }
     }
 
     private static void printError(PrintStream output, String code, String message) {

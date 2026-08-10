@@ -1,0 +1,26 @@
+version: 1
+
+queries:
+  - id: account-inventory
+    sql: |
+      SELECT id, email, status
+      FROM accounts
+      ORDER BY id
+    compare:
+      baseline_to_up: preserve
+      baseline_to_down: preserve
+      row_order: ordered
+    assertions:
+      non_null: [id, email, status]
+      unique_by: [id]
+
+  - id: status-counts
+    sql: |
+      SELECT status, COUNT(*) AS account_count
+      FROM accounts
+      GROUP BY status
+      ORDER BY status
+    compare:
+      baseline_to_up: preserve
+      baseline_to_down: preserve
+      row_order: ordered

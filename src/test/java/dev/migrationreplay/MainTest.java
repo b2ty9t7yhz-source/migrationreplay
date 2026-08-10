@@ -28,7 +28,16 @@ final class MainTest {
         Invocation invocation = invoke("--help");
 
         assertEquals(0, invocation.exitCode());
-        assertTrue(invocation.standardOutput().contains("MigrationReplay V1"));
+        assertTrue(invocation.standardOutput().contains("MigrationReplay 1.0.0"));
+    }
+
+    @Test
+    void reportsTheReleaseVersion() {
+        Invocation invocation = invoke("--version");
+
+        assertEquals(0, invocation.exitCode());
+        assertEquals("MigrationReplay 1.0.0\n", invocation.standardOutput());
+        assertEquals("", invocation.standardError());
     }
 
     @Test
@@ -81,6 +90,22 @@ final class MainTest {
         assertTrue(invocation.standardOutput().contains("status=FAIL"));
         assertTrue(Files.readString(output.resolve("report.json"))
                 .contains("QUERY_BEHAVIOR_CHANGED"));
+    }
+
+    @Test
+    void shippedRegressionExampleDetectsDataLossAfterRollback() throws Exception {
+        Path output = temporaryDirectory.resolve("data-loss-report");
+
+        Invocation invocation = invoke(
+                "run",
+                "examples/data-loss-regression",
+                "--output-dir",
+                output.toString());
+
+        assertEquals(1, invocation.exitCode());
+        String report = Files.readString(output.resolve("report.json"));
+        assertTrue(report.contains("QUERY_BEHAVIOR_CHANGED"));
+        assertTrue(report.contains("SCHEMA_ROUND_TRIP_MISMATCH"));
     }
 
     private static Invocation invoke(String... arguments) {

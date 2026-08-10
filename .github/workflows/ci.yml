@@ -10,6 +10,7 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -23,5 +24,27 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Run tests
-        run: ./gradlew clean test --no-daemon
+      - name: Run quality gates and build distribution
+        run: ./gradlew clean check installDist distZip --no-daemon
+
+      - name: Smoke test packaged CLI
+        run: |
+          ./build/install/migrationreplay/bin/migrationreplay --version
+          ./build/install/migrationreplay/bin/migrationreplay validate build/install/migrationreplay/examples/add-user-email
+          ./build/install/migrationreplay/bin/migrationreplay run build/install/migrationreplay/examples/add-user-email --output-dir build/ci-example-report
+
+      - name: Create distribution checksum
+        working-directory: build/distributions
+        run: sha256sum migrationreplay-1.0.0.zip > migrationreplay-1.0.0.zip.sha256
+
+      - name: Upload distribution and reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: migrationreplay-1.0.0
+          path: |
+            build/distributions/migrationreplay-1.0.0.zip
+            build/distributions/migrationreplay-1.0.0.zip.sha256
+            build/ci-example-report/report.json
+            build/ci-example-report/report.md
+            build/reports/jacoco/test/html/
+          if-no-files-found: error

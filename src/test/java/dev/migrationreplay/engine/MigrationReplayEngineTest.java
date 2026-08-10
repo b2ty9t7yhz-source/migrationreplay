@@ -214,6 +214,29 @@ final class MigrationReplayEngineTest {
     }
 
     @Test
+    void reportsConfiguredFullTableScansWithoutFailingTheReplay() throws Exception {
+        String config = """
+                version: 1
+                queries:
+                  - id: item-by-value
+                    sql: SELECT id FROM items WHERE value = :value
+                    parameters:
+                      value:
+                        type: text
+                        value: one
+                    plan:
+                      warn_on_full_scan: [items]
+                """;
+
+        RunReport report = run("SELECT 1;", "SELECT 1;", config);
+
+        assertEquals("PASS", report.status());
+        assertTrue(report.warnings().stream()
+                .anyMatch(warning -> warning.code().equals("FULL_TABLE_SCAN")
+                        && warning.queryId().equals("item-by-value")));
+    }
+
+    @Test
     void writesByteIdenticalReportsForIdenticalInputsAndRuntime() throws Exception {
         InputBundle bundle = bundle(
                 FIXTURES,

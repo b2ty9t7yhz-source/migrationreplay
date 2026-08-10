@@ -135,7 +135,10 @@ public final class ConfigLoader {
             JsonNode parameter = field.getValue();
             requireObject(parameter, parameterContext);
             rejectUnknownFields(parameter, Set.of("type", "value"), parameterContext);
-            String typeText = requiredText(parameter, "type", parameterContext);
+            JsonNode configuredType = parameter.get("type");
+            String typeText = configuredType != null && configuredType.isNull()
+                    ? "null"
+                    : requiredText(parameter, "type", parameterContext);
             ValueType type = parseEnum(ValueType.class, typeText, parameterContext + ".type");
             JsonNode rawValue = parameter.get("value");
             values.put(name, new ParameterValue(type, parseParameterValue(type, rawValue, parameterContext)));

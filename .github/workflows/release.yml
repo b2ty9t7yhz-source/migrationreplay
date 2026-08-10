@@ -1,0 +1,46 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: microsoft
+          java-version: "21"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Verify tag and build release
+        run: |
+          release_version="$(./gradlew -q printVersion)"
+          test "${GITHUB_REF_NAME}" = "v${release_version}"
+          ./gradlew clean check distZip --no-daemon
+          cd build/distributions
+          sha256sum "migrationreplay-${release_version}.zip" > "migrationreplay-${release_version}.zip.sha256"
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          release_version="$(./gradlew -q printVersion)"
+          gh release create "${GITHUB_REF_NAME}" \
+            "build/distributions/migrationreplay-${release_version}.zip" \
+            "build/distributions/migrationreplay-${release_version}.zip.sha256" \
+            --verify-tag \
+            --generate-notes \
+            --title "MigrationReplay ${GITHUB_REF_NAME}"
