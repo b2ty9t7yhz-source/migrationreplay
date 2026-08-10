@@ -5,7 +5,8 @@
 2. Run the complete quality gate:
 
    ```bash
-   ./gradlew clean check installDist distZip --warning-mode all --no-daemon
+   ./gradlew clean check installDist distZip --dependency-verification=strict \
+     --warning-mode all --no-daemon
    ```
 
 3. Run the packaged passing example and verify exit code `0`.

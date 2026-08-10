@@ -1,7 +1,7 @@
 # MigrationReplay
 
 [![CI](https://github.com/b2ty9t7yhz-source/migrationreplay/actions/workflows/ci.yml/badge.svg)](https://github.com/b2ty9t7yhz-source/migrationreplay/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-1.0.1-blue.svg)](CHANGELOG.md)
 [![Java](https://img.shields.io/badge/Java-21-ED8B00.svg)](https://openjdk.org/projects/jdk/21/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
@@ -141,15 +141,16 @@ deliberately conservative; it is not a sandbox for hostile SQL. See the full
 - Enforced JaCoCo minimums: 84% line and 65% branch coverage
 - Transaction rollback and deterministic-report regression tests
 - CI-built installation ZIP, separate packaged-CLI smoke tests, and report artifacts
-- Gradle Wrapper distribution checksum and dependency update automation
+- Gradle Wrapper and dependency-artifact SHA-256 verification
+- Dependency locking and automated dependency update proposals
 
 Run the same gate used by CI:
 
 ```bash
-./gradlew clean check installDist distZip --no-daemon
+./gradlew clean check installDist distZip --dependency-verification=strict --no-daemon
 ```
 
-## V1.0.0 scope
+## V1 scope
 
 V1 supports SQLite, deterministic synthetic fixtures, local temporary database
 copies, one migration pair, and a read-only query corpus. It intentionally does
