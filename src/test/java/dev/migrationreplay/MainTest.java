@@ -28,7 +28,7 @@ final class MainTest {
         Invocation invocation = invoke("--help");
 
         assertEquals(0, invocation.exitCode());
-        assertTrue(invocation.standardOutput().contains("MigrationReplay 1.0.0"));
+        assertTrue(invocation.standardOutput().contains("MigrationReplay 1.0.1"));
     }
 
     @Test
@@ -36,7 +36,7 @@ final class MainTest {
         Invocation invocation = invoke("--version");
 
         assertEquals(0, invocation.exitCode());
-        assertEquals("MigrationReplay 1.0.0\n", invocation.standardOutput());
+        assertEquals("MigrationReplay 1.0.1\n", invocation.standardOutput());
         assertEquals("", invocation.standardError());
     }
 

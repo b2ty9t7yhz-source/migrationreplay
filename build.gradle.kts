@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "dev.migrationreplay"
-version = "1.0.0"
+version = "1.0.1"
 
 val releaseVersion = version.toString()
 
@@ -32,12 +32,12 @@ java {
 }
 
 dependencies {
-    implementation("org.xerial:sqlite-jdbc:3.53.1.0")
-    implementation(platform("com.fasterxml.jackson:jackson-bom:2.21.5"))
+    implementation("org.xerial:sqlite-jdbc:3.53.2.1")
+    implementation(platform("com.fasterxml.jackson:jackson-bom:2.22.1"))
     implementation("com.fasterxml.jackson.core:jackson-databind")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml")
 
-    testImplementation(platform("org.junit:junit-bom:6.1.0"))
+    testImplementation(platform("org.junit:junit-bom:6.1.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }

@@ -29,7 +29,7 @@ jobs:
         run: |
           release_version="$(./gradlew -q printVersion)"
           test "${GITHUB_REF_NAME}" = "v${release_version}"
-          ./gradlew clean check distZip --no-daemon
+          ./gradlew clean check distZip --dependency-verification=strict --no-daemon
           cd build/distributions
           sha256sum "migrationreplay-${release_version}.zip" > "migrationreplay-${release_version}.zip.sha256"
 

@@ -3,6 +3,21 @@
 All notable changes to MigrationReplay are documented here. The project follows
 [Semantic Versioning](https://semver.org/).
 
+## [1.0.1] - Unreleased
+
+### Changed
+
+- Updated Gradle, SQLite JDBC, Jackson, and JUnit maintenance versions
+- Removed hard-coded distribution versions from the CI workflow
+
+### Security
+
+- Added SHA-256 verification metadata for resolved Gradle dependencies
+
+### Fixed
+
+- Removed a duplicated heading from the contribution guide
+
 ## [1.0.0] - 2026-08-10
 
 ### Added
@@ -18,4 +33,5 @@ All notable changes to MigrationReplay are documented here. The project follows
 - Passing and intentional data-loss regression examples
 - Java 21 Gradle distribution, coverage verification, and GitHub Actions CI
 
+[1.0.1]: https://github.com/b2ty9t7yhz-source/migrationreplay/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/b2ty9t7yhz-source/migrationreplay/releases/tag/v1.0.0
