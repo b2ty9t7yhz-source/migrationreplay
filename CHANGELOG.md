@@ -3,7 +3,7 @@
 All notable changes to MigrationReplay are documented here. The project follows
 [Semantic Versioning](https://semver.org/).
 
-## [1.0.1] - Unreleased
+## [1.0.1] - 2026-08-11
 
 ### Changed
 
@@ -33,5 +33,5 @@ All notable changes to MigrationReplay are documented here. The project follows
 - Passing and intentional data-loss regression examples
 - Java 21 Gradle distribution, coverage verification, and GitHub Actions CI
 
-[1.0.1]: https://github.com/b2ty9t7yhz-source/migrationreplay/compare/v1.0.0...HEAD
+[1.0.1]: https://github.com/b2ty9t7yhz-source/migrationreplay/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/b2ty9t7yhz-source/migrationreplay/releases/tag/v1.0.0
