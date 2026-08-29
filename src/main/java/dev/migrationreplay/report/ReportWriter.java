@@ -19,17 +19,29 @@ public final class ReportWriter {
             .enable(SerializationFeature.INDENT_OUTPUT)
             .build();
     private final MarkdownRenderer markdownRenderer = new MarkdownRenderer();
+    private final SarifRenderer sarifRenderer = new SarifRenderer();
 
-    public record WrittenReports(Path json, Path markdown) {}
+    public record WrittenReports(Path json, Path markdown, Path sarif) {}
 
     public WrittenReports write(Path outputDirectory, RunReport report) throws IOException {
+        return write(outputDirectory, report, Path.of("."));
+    }
+
+    public WrittenReports write(
+            Path outputDirectory, RunReport report, Path bundleDirectory) throws IOException {
         Files.createDirectories(outputDirectory);
         Path json = outputDirectory.resolve("report.json");
         Path markdown = outputDirectory.resolve("report.md");
+        Path sarif = outputDirectory.resolve("report.sarif");
         String jsonText = JSON_MAPPER.writerWithDefaultPrettyPrinter().writeValueAsString(report) + "\n";
+        String sarifText = JSON_MAPPER.writerWithDefaultPrettyPrinter()
+                        .writeValueAsString(sarifRenderer.render(report, bundleDirectory))
+                + "\n";
         writeAtomically(json, jsonText);
         writeAtomically(markdown, markdownRenderer.render(report));
-        return new WrittenReports(json.toAbsolutePath(), markdown.toAbsolutePath());
+        writeAtomically(sarif, sarifText);
+        return new WrittenReports(
+                json.toAbsolutePath(), markdown.toAbsolutePath(), sarif.toAbsolutePath());
     }
 
     private static void writeAtomically(Path target, String content) throws IOException {

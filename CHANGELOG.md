@@ -3,6 +3,23 @@
 All notable changes to MigrationReplay are documented here. The project follows
 [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+## [1.1.0] - 2026-08-29
+
+### Added
+
+- Deterministic SARIF 2.1.0 reports with stable rule IDs, severities, source-file
+  locations, and SHA-256 partial fingerprints
+- Fixed SARIF rule catalog emitted on both passing and failing runs
+- GitHub Code Scanning and CI artifact integration guidance
+
+### Changed
+
+- CLI replay summaries and CI artifacts now include `report.sarif`
+- CI now verifies the packaged CLI's intentional regression exit code and SARIF
+  findings
+
 ## [1.0.1] - 2026-08-11
 
 ### Changed
@@ -33,5 +50,7 @@ All notable changes to MigrationReplay are documented here. The project follows
 - Passing and intentional data-loss regression examples
 - Java 21 Gradle distribution, coverage verification, and GitHub Actions CI
 
+[Unreleased]: https://github.com/b2ty9t7yhz-source/migrationreplay/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/b2ty9t7yhz-source/migrationreplay/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/b2ty9t7yhz-source/migrationreplay/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/b2ty9t7yhz-source/migrationreplay/releases/tag/v1.0.0

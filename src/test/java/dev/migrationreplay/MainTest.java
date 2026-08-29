@@ -28,7 +28,7 @@ final class MainTest {
         Invocation invocation = invoke("--help");
 
         assertEquals(0, invocation.exitCode());
-        assertTrue(invocation.standardOutput().contains("MigrationReplay 1.0.1"));
+        assertTrue(invocation.standardOutput().contains("MigrationReplay 1.1.0"));
     }
 
     @Test
@@ -36,7 +36,7 @@ final class MainTest {
         Invocation invocation = invoke("--version");
 
         assertEquals(0, invocation.exitCode());
-        assertEquals("MigrationReplay 1.0.1\n", invocation.standardOutput());
+        assertEquals("MigrationReplay 1.1.0\n", invocation.standardOutput());
         assertEquals("", invocation.standardError());
     }
 
@@ -57,7 +57,7 @@ final class MainTest {
     }
 
     @Test
-    void runsTheExampleAndWritesBothReports() {
+    void runsTheExampleAndWritesAllReports() {
         Path output = temporaryDirectory.resolve("passing-report");
 
         Invocation invocation = invoke(
@@ -65,8 +65,10 @@ final class MainTest {
 
         assertEquals(0, invocation.exitCode());
         assertTrue(invocation.standardOutput().contains("status=PASS"));
+        assertTrue(invocation.standardOutput().contains("sarif="));
         assertTrue(Files.isRegularFile(output.resolve("report.json")));
         assertTrue(Files.isRegularFile(output.resolve("report.md")));
+        assertTrue(Files.isRegularFile(output.resolve("report.sarif")));
     }
 
     @Test
@@ -89,6 +91,8 @@ final class MainTest {
         assertEquals(1, invocation.exitCode());
         assertTrue(invocation.standardOutput().contains("status=FAIL"));
         assertTrue(Files.readString(output.resolve("report.json"))
+                .contains("QUERY_BEHAVIOR_CHANGED"));
+        assertTrue(Files.readString(output.resolve("report.sarif"))
                 .contains("QUERY_BEHAVIOR_CHANGED"));
     }
 

@@ -37,6 +37,17 @@ jobs:
           ./build/install/migrationreplay/bin/migrationreplay validate build/install/migrationreplay/examples/add-user-email
           ./build/install/migrationreplay/bin/migrationreplay run build/install/migrationreplay/examples/add-user-email --output-dir build/ci-example-report
 
+      - name: Verify intentional regression and SARIF contract
+        run: |
+          set +e
+          ./build/install/migrationreplay/bin/migrationreplay run build/install/migrationreplay/examples/data-loss-regression --output-dir build/ci-data-loss-report
+          replay_status=$?
+          set -e
+          test "$replay_status" -eq 1
+          test "$(grep -c '"ruleId" : ' build/ci-data-loss-report/report.sarif)" -eq 5
+          grep -q '"ruleId" : "QUERY_BEHAVIOR_CHANGED"' build/ci-data-loss-report/report.sarif
+          grep -q '"ruleId" : "SCHEMA_ROUND_TRIP_MISMATCH"' build/ci-data-loss-report/report.sarif
+
       - name: Create distribution checksum
         working-directory: build/distributions
         run: |
@@ -52,5 +63,9 @@ jobs:
             build/distributions/migrationreplay-${{ steps.project-version.outputs.value }}.zip.sha256
             build/ci-example-report/report.json
             build/ci-example-report/report.md
+            build/ci-example-report/report.sarif
+            build/ci-data-loss-report/report.json
+            build/ci-data-loss-report/report.md
+            build/ci-data-loss-report/report.sarif
             build/reports/jacoco/test/html/
           if-no-files-found: error

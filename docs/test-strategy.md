@@ -4,10 +4,10 @@ MigrationReplay uses unit, component, integration, and CLI tests. Every fixture
 is synthetic. The suite does not connect to a production database and does not
 use timing-sensitive assertions.
 
-The V1 gate contains 70 tests and enforces minimum JaCoCo coverage of 84%
-for lines and 65% for branches. The thresholds are lower than the current
-measured values so ordinary refactoring has a small margin while meaningful
-coverage loss still fails the build.
+The current gate contains 75 tests and enforces minimum JaCoCo coverage of 84%
+for lines and 65% for branches. The latest clean local gate measured 88.03% line
+and 69.92% branch coverage. The thresholds leave a small refactoring margin
+while meaningful coverage loss still fails the build.
 
 ## Required failure coverage
 
@@ -31,11 +31,14 @@ coverage loss still fails the build.
 | Runtime type changes while display text stays equal | Typed canonical comparison detects it |
 | Row order changes under ordered comparison | Ordered comparison detects it |
 | Row multiplicity changes under unordered comparison | Multiset comparison detects it |
+| A PASS report has no findings | The full fixed SARIF rule catalog remains present |
+| A finding uses an unregistered rule code | Report generation fails instead of changing the contract |
+| A bundle is outside the repository | SARIF omits the absolute temporary path |
 
 ## Determinism check
 
 An integration test runs the same input bundle twice in the same runtime,
-writes both report formats, and requires byte-identical JSON and Markdown.
+writes all report formats, and requires byte-identical JSON, Markdown, and SARIF.
 Reports intentionally exclude timestamps, durations, random identifiers, and
 temporary database paths.
 
@@ -49,8 +52,10 @@ temporary database paths.
   --output-dir build/example-report
 ```
 
-CI repeats this gate, smoke-tests the packaged CLI, and uploads the distribution,
-reports, and HTML coverage report as workflow artifacts.
+CI repeats this gate, smoke-tests both the passing bundle and the intentional
+data-loss regression, verifies the failing CLI exit code and SARIF results, and
+uploads the distribution, both report sets, and HTML coverage report as workflow
+artifacts.
 
 Gradle dependency locking fixes the selected module versions, while strict
 dependency verification checks resolved artifacts against the committed

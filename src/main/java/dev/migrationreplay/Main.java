@@ -74,10 +74,12 @@ public final class Main {
         }
         InputBundle bundle = new BundleLoader().load(Path.of(args[1]));
         RunReport report = new MigrationReplayEngine().run(bundle);
-        WrittenReports written = new ReportWriter().write(Path.of(args[3]), report);
+        WrittenReports written =
+                new ReportWriter().write(Path.of(args[3]), report, bundle.directory());
         out.println("status=" + report.status());
         out.println("json=" + written.json());
         out.println("markdown=" + written.markdown());
+        out.println("sarif=" + written.sarif());
         return report.status().equals("PASS") ? 0 : 1;
     }
 

@@ -25,7 +25,7 @@ read-only replay           migration up transaction
        behavioral + schema comparisons
                    |
                    v
-       atomic JSON and Markdown reports
+       atomic JSON, Markdown, and SARIF reports
 ```
 
 ## Components
@@ -36,8 +36,8 @@ read-only replay           migration up transaction
   schema inspection
 - `replay`: typed query execution, canonical rows, and query-plan capture
 - `engine`: state orchestration, assertions, and comparisons
-- `report`: deterministic report models, JSON serialization, and Markdown
-  rendering
+- `report`: deterministic report models plus JSON, Markdown, and SARIF 2.1.0
+  rendering; a fixed SARIF catalog owns rule metadata and location policy
 - `Main`: dependency-free command-line interface and exit codes
 
 ## Transaction boundaries

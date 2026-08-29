@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "dev.migrationreplay"
-version = "1.0.1"
+version = "1.1.0"
 
 val releaseVersion = version.toString()
 
@@ -65,6 +65,7 @@ distributions {
 }
 
 tasks.processResources {
+    inputs.property("releaseVersion", releaseVersion)
     filesMatching("dev/migrationreplay/version.properties") {
         expand("version" to releaseVersion)
     }

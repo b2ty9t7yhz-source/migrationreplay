@@ -257,6 +257,9 @@ final class MigrationReplayEngineTest {
         assertEquals(
                 Files.readString(firstDirectory.resolve("report.md")),
                 Files.readString(secondDirectory.resolve("report.md")));
+        assertEquals(
+                Files.readString(firstDirectory.resolve("report.sarif")),
+                Files.readString(secondDirectory.resolve("report.sarif")));
     }
 
     private RunReport run(String up, String down, String yaml) throws Exception {
